@@ -26,13 +26,14 @@ public class OrderController {
     }
 
     @GetMapping("/{customerId}")
-    public ResponseEntity<OrderResponse> getAllOrdersForCustomer(@PathVariable Long customerId){
+    public ResponseEntity<List<OrderResponse>> getAllOrdersForCustomer(@PathVariable Long customerId){
         Optional<Customer> optionalCustomer = customerService.getSingleCustomer(customerId);
         if (!optionalCustomer.isPresent()) {
             return ResponseEntity.notFound().build();
         }
-        OrderResponse orderResponse = orderService.getAllOrdersForCustomer(customerId);
-        if(orderResponse.getOrderItemResponseList()==null){
+        List<OrderResponse> orderResponse = orderService.getAllOrdersForCustomer(customerId);
+
+        if(orderResponse.size()==0){
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(orderResponse);

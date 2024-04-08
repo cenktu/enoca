@@ -28,6 +28,7 @@ public class CustomerService {
         return customerRepository.findById(customerId);
     }
 
+    // AddCustomer method
     public Customer addCustomer(Customer newCustomer) {
         Cart newCart= new Cart();
         newCart.setCustomer(newCustomer);

@@ -17,18 +17,22 @@ public class ProductService {
         this.productRepository=productRepository;
     }
 
+
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
+    // GetProduct method
     public Optional<Product> getSingleProduct(Long productId) {
         return productRepository.findById(productId);
     }
 
+    // CreateProduct method
     public Product createProduct(Product newProduct) {
         return productRepository.save(newProduct);
     }
 
+    // UpdateProduct method
     public Product updateProduct(Long productId, Product updateProduct) {
         Optional<Product> optionalProduct = productRepository.findById(productId);
         if(optionalProduct.isPresent()){
@@ -42,6 +46,7 @@ public class ProductService {
         return null;
     }
 
+    // DeleteProduct method
     public void deleteProduct(Long productId) {
         productRepository.deleteById(productId);
     }

@@ -27,26 +27,31 @@ public class OrderService {
     }
 
 
-    public OrderResponse getAllOrdersForCustomer(Long customerId){
-        OrderResponse orderResponse = new OrderResponse();
-        Customer customer= customerService.getSingleCustomer(customerId).orElse(null);
+    // GetAllOrdersForCustomer method that returns list of orders for customer
+    public List<OrderResponse> getAllOrdersForCustomer(Long customerId){
+        List<OrderResponse> orderResponses = new ArrayList<>();
 
-        if(customer==null){
-            return orderResponse;
+        Customer customer = customerService.getSingleCustomer(customerId).orElse(null);
+        if (customer == null) {
+            return orderResponses;
         }
-        List<ModelOrder> orderList= customer.getOrders();
-        if(orderList==null||orderList.isEmpty()){
-            return orderResponse;
+
+        List<ModelOrder> orderList = customer.getOrders();
+        if (orderList == null || orderList.isEmpty()) {
+            return orderResponses;
         }
-        List<OrderItemResponse> orderItemResponseList = new ArrayList<>();
-        double totalPrice=0;
-        int totalQuantity=0;
-        for(ModelOrder order : orderList){
-            List<ModelOrderItem> orderItemList=order.getOrderItemList();
-            for(ModelOrderItem orderItem : orderItemList){
+
+        for (ModelOrder order : orderList) {
+            OrderResponse orderResponse = new OrderResponse();
+            List<OrderItemResponse> orderItemResponseList = new ArrayList<>();
+            double totalPrice = 0;
+            int totalQuantity = 0;
+
+            List<ModelOrderItem> orderItemList = order.getOrderItemList();
+            for (ModelOrderItem orderItem : orderItemList) {
                 OrderItemResponse orderItemResponse = new OrderItemResponse();
                 Product product = orderItem.getProduct();
-                double isUpdatedPrice= product.getPrice();
+                double isUpdatedPrice = product.getPrice();
                 orderItemResponse.setCurrentPrice(isUpdatedPrice);
                 orderItemResponse.setProductName(orderItem.getProduct().getName());
                 orderItemResponse.setBuyPrice(orderItem.getPrice());
@@ -56,14 +61,20 @@ public class OrderService {
                 totalPrice += orderItem.getPrice() * orderItem.getQuantity();
                 totalQuantity += orderItem.getQuantity();
             }
+
+            orderResponse.setTotalPrice(totalPrice);
+            orderResponse.setTotalAmount(totalQuantity);
+            orderResponse.setOrderCode(order.getOrderCode());
+            orderResponse.setOrderItemResponseList(orderItemResponseList);
+
+            orderResponses.add(orderResponse);
         }
-        orderResponse.setTotalPrice(totalPrice);
-        orderResponse.setTotalAmount(totalQuantity);
-        orderResponse.setOrderItemResponseList(orderItemResponseList);
-        return orderResponse;
+
+        return orderResponses;
 
     }
 
+    // PlaceOrder method to order items inside customer's cart
     public OrderResponse placeOrder(Cart cart, Customer customer) {
         OrderResponse orderResponse= new OrderResponse();
 
@@ -111,6 +122,7 @@ public class OrderService {
         return orderResponse;
     }
 
+    // GetOrderForCode method that returns the specific order with the given order code
     public OrderResponse getOrderForCode(String orderCode) {
         ModelOrder order = orderRepository.findByOrderCode(orderCode);
         if (order == null) {

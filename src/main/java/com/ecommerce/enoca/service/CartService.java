@@ -30,6 +30,7 @@ public class CartService {
     }
 
 
+    // GetCard method
     public CartResponse getCart(Long customerId,Cart cart) {
         double totalPrice = 0;
         int totalAmount = 0;
@@ -41,6 +42,7 @@ public class CartService {
         return getCartResponse(cart, totalPrice, totalAmount);
     }
 
+    // UpdateCart method
     public CartResponse updateCart(CartItemRequest cartItemRequest, Customer customer, Cart cart) {
             Long productId = cartItemRequest.getProductId();
             int quantity = cartItemRequest.getQuantity();
@@ -74,6 +76,7 @@ public class CartService {
         return getCartResponse(cart, totalPrice, totalQuantity);
     }
 
+    // EmptyCard method
     public void emptyCart(Cart cart) {
         List<CartItem> cartItems = new ArrayList<>(cart.getCartItemList());
         for (CartItem cartItem : cartItems) {
@@ -87,6 +90,7 @@ public class CartService {
     }
 
 
+    // AddProductToCart method
     public CartResponse addToCart(Customer customer, CartItemRequest cartItemRequest,Product product) {
         Cart cart = customer.getCart();
         if (cart == null) {
@@ -123,6 +127,7 @@ public class CartService {
         return getCartResponse(cart, totalPrice, totalAmount);
     }
 
+    // getCardResponse method to display order items inside an order
     private CartResponse getCartResponse(Cart cart, double totalPrice, int totalAmount) {
         CartResponse cartResponse = new CartResponse();
         cartResponse.setTotalPrice(totalPrice);
@@ -141,6 +146,7 @@ public class CartService {
         return cartResponse;
     }
 
+    // RemoveProductFromCart method
     public void removeProductFromCart(Product product, Cart cart) {
         CartItem cartItem = cart.getCartItemByProduct(product);
         if(cartItem!=null){
