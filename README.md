@@ -40,3 +40,4 @@ The EnocaDB application uses Hibernate to manage database schema changes. The `s
 ### API Docs Path
 The EnocaDB application uses Springdoc OpenAPI to generate API documentation. The `springdoc.api-docs.path` property is set to `/api-docs`, which specifies the endpoint path for accessing the generated OpenAPI documentation.
 
+[OpenAPI documentation link](http://localhost:8080/swagger-ui/index.html)
